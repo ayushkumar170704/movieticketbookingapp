@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { dummyShowsData } from '../../assets/assets';
 import Loading from '../../components/Loading';
-import Title from '../../components/admin/Title'; // Fixed: Removed .JSX extension
+import Title from '../../components/admin/Title';
 import { CheckIcon, StarIcon } from 'lucide-react';
 import { kConverter } from '../../lib/kConverter';
 
@@ -18,20 +18,72 @@ const AddShows = () => {
   };
 
   const handleDateTimeAdd = () => {
-    if (!dateTimeInput) return;
+    console.log("Add Time button clicked");
+    console.log("dateTimeInput value:", dateTimeInput);
+    
+    if (!dateTimeInput) {
+      console.log("No datetime input provided");
+      return;
+    }
+    
+    // dateTimeInput is already in "YYYY-MM-DDTHH:MM" format
     const [date, time] = dateTimeInput.split("T");
-    if (!date || !time) return;
+    console.log("Split result - date:", date, "time:", time);
+    
+    if (!date || !time) {
+      console.log("Invalid date or time after split");
+      return;
+    }
 
     setDateTimeSelection((prev) => {
       const times = prev[date] || [];
+      console.log("Existing times for date:", times);
+      
       if (!times.includes(time)) {
-        return { ...prev, [date]: [...times, time] };
+        const newSelection = { ...prev, [date]: [...times, time] };
+        console.log("New dateTimeSelection:", newSelection);
+        return newSelection;
       }
+      console.log("Time already exists for this date");
       return prev;
     });
     
     // Clear input after adding
     setDateTimeInput("");
+  };
+
+  const handleRemoveTime = (date, timeToRemove) => {
+    setDateTimeSelection((prev) => {
+      const times = prev[date].filter(time => time !== timeToRemove);
+      if (times.length === 0) {
+        const { [date]: removed, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [date]: times };
+    });
+  };
+
+  const handleSubmit = () => {
+    if (!selectedMovie || !showPrice || Object.keys(dateTimeSelection).length === 0) {
+      alert('Please select a movie, set a price, and add at least one show time.');
+      return;
+    }
+
+    const showData = {
+      movieId: selectedMovie,
+      price: parseFloat(showPrice),
+      showTimes: dateTimeSelection,
+      createdAt: new Date().toISOString()
+    };
+
+    console.log('Show data to submit:', showData);
+    // Here you would typically send the data to your backend
+    alert('Show added successfully!');
+    
+    // Reset form
+    setSelectedMovie(null);
+    setShowPrice("");
+    setDateTimeSelection({});
   };
 
   useEffect(() => {
@@ -41,23 +93,25 @@ const AddShows = () => {
   return nowPlayingMovies.length > 0 ? (
     <>
       <Title text1="Add" text2="Shows" />
-      <p className='mt-10 text-lg font-medium'>Now Playing Movies</p> {/* Fixed: font-mdeium -> font-medium */}
+      <p className='mt-10 text-lg font-medium'>Now Playing Movies</p>
       
       <div className='overflow-x-auto pb-4'>
-        <div className='group flex flex-wrap gap-4 mt-4 w-max'>
+        <div className='flex flex-wrap gap-4 mt-4'>
           {nowPlayingMovies.map((movie) => (
             <div 
               key={movie.id} 
-              className={`relative max-w-40 cursor-pointer group-hover:not-hover:opacity-40 hover:-translate-y-1 transition duration-300`} 
+              className={`relative max-w-40 cursor-pointer hover:opacity-100 ${
+                selectedMovie === movie.id ? 'opacity-100' : 'opacity-70 hover:opacity-90'
+              } hover:-translate-y-1 transition duration-300`} 
               onClick={() => setSelectedMovie(movie.id)}
             >
               <div className='relative'>
                 <img 
                   src={movie.poster_path} 
                   alt={movie.title} 
-                  className='w-full object-cover brightness-90' 
+                  className='w-full object-cover brightness-90 rounded-lg' 
                 />
-                <div className='text-sm flex items-center justify-between p-2 bg-black/70 w-full absolute bottom-0 left-0'>
+                <div className='text-sm flex items-center justify-between p-2 bg-black/70 w-full absolute bottom-0 left-0 rounded-b-lg'>
                   <p className='flex items-center gap-1 text-gray-400'>
                     <StarIcon className='w-4 h-4 text-primary fill-primary' />
                     {movie.vote_average.toFixed(1)}
@@ -67,12 +121,12 @@ const AddShows = () => {
               </div>
               
               {selectedMovie === movie.id && (
-                <div className='absolute top-2 right-2 flex items-center justify-center bg-primary h-6 w-6 rounded'>
+                <div className='absolute top-2 right-2 flex items-center justify-center bg-primary h-6 w-6 rounded-full'>
                   <CheckIcon className='w-4 h-4 text-white' strokeWidth={2.5} />
                 </div>
               )}
               
-              <p className='font-medium truncate'>{movie.title}</p>
+              <p className='font-medium truncate mt-2'>{movie.title}</p>
               <p className='text-gray-400 text-sm'>{movie.release_date}</p>
             </div>
           ))}
@@ -117,19 +171,28 @@ const AddShows = () => {
       {/* Display selected date/time combinations */}
       {Object.keys(dateTimeSelection).length > 0 && (
         <div className='mt-6'>
-          <h3 className='text-sm font-medium mb-2'>Selected Show Times:</h3>
+          <h3 className='text-sm font-medium mb-2'>Selected Date-Time</h3>
           <div className='space-y-2'>
             {Object.entries(dateTimeSelection).map(([date, times]) => (
-              <div key={date} className='p-3 border border-gray-600 rounded-md'>
-                <p className='font-medium mb-1'>{new Date(date).toDateString()}</p>
-                <div className='flex flex-wrap gap-2'>
+              <div key={date}>
+                <p className='font-medium mb-2'>{date}</p>
+                <div className='space-y-1'>
                   {times.map((time) => (
-                    <span 
+                    <div 
                       key={time} 
-                      className='px-2 py-1 bg-primary/20 text-primary rounded text-sm'
+                      className='flex items-center gap-2'
                     >
-                      {time}
-                    </span>
+                      <span className='px-2 py-1 bg-primary/20 text-primary rounded text-sm min-w-16 text-center'>
+                        {time}
+                      </span>
+                      <button
+                        onClick={() => handleRemoveTime(date, time)}
+                        className='w-6 h-6 bg-red-500 text-white rounded flex items-center justify-center text-sm hover:bg-red-600 transition-colors'
+                        title="Remove time"
+                      >
+                        ×
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -137,6 +200,16 @@ const AddShows = () => {
           </div>
         </div>
       )}
+
+      {/* Submit Button */}
+      <div className='mt-8'>
+        <button 
+          onClick={handleSubmit}
+          className='bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/80 transition-colors font-medium'
+        >
+          Add Show
+        </button>
+      </div>
     </>
   ) : (
     <Loading />
