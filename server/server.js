@@ -1,25 +1,33 @@
-import express from 'express';
-import cors from 'cors';
-import 'dotenv/config'
-import connectDB from './configs/db.js';
-import { clerkMiddleware } from '@clerk/express'
-import { serve } from "inngest/express";
-import { inngest, functions } from "./inngest/index.js"
+import express from "express";
+import cors from "cors";
+import "dotenv/config";
+import connectDB from "./configs/db.js";
+import { clerkMiddleware } from "@clerk/express";
+import { serve as serveInngest } from "inngest/express";
+import { inngest, functions } from "./inngest/index.js";
+
+// Ensure DB is connected on cold start
+await connectDB();
 
 const app = express();
-const port =3000;
 
-await connectDB()
+// Middlewares
+app.use(express.json());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "*",
+    credentials: true,
+  })
+);
 
-//middleware
-app.use(express.json())
-app.use(cors())
-app.use(clerkMiddleware())
+// Clerk middleware (place before protected routes)
+app.use(clerkMiddleware());
 
-// api routes
+// Health route
+app.get("/", (_req, res) => res.send("server is live"));
 
-app.get('/',(req,res)=> res.send("server is live"))
-app.use("/api/inngest",serve({client:inngest, functions}))
+// Inngest endpoint for Vercel (serverless)
+app.use("/api/inngest", serveInngest({ client: inngest, functions }));
 
-app.listen(port,()=> console.log(`server listening at http://localhost:${port}`));
-
+// Export the app as a handler for Vercel (@vercel/node)
+export default app;
