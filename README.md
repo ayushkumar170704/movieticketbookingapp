@@ -89,18 +89,15 @@ The application features a modern, responsive design with an intuitive user expe
 - Dotenv - Environment variable management
   
 ### Screenshots
-<img width="1920" height="1080" alt="Screenshot (39)" src="https://github.com/user-attachments/assets/2f2d0741-8bda-442c-9d24-f60c0e25f073" />
-<img width="1920" height="1080" alt="Screenshot (38)" src="https://github.com/user-attachments/assets/5bde7c2d-4cf6-4419-b8f1-4a781ae769f4" />
-<img width="1920" height="1080" alt="Screenshot (37)" src="https://github.com/user-attachments/assets/7029eced-c102-4ba1-bfac-598024c1808e" />
-<img width="1920" height="1080" alt="Screenshot (36)" src="https://github.com/user-attachments/assets/91a3d536-f7f6-4f48-b986-e4a6a7df2f98" />
-<img width="1920" height="1080" alt="Screenshot (35)" src="https://github.com/user-attachments/assets/102ca5a9-0480-4c24-86d2-cd7d7d76da2d" />
-<img width="1920" height="1080" alt="Screenshot (34)" src="https://github.com/user-attachments/assets/c8d9b424-5314-4ddb-9bec-cb5f0d993597" />
-<img width="1920" height="1080" alt="Screenshot (33)" src="https://github.com/user-attachments/assets/e8480b19-e19d-4bc9-bb0b-3cc8a7082171" />
-<img width="1920" height="1080" alt="Screenshot (32)" src="https://github.com/user-attachments/assets/0adc5fd1-7834-4abc-a2c1-10f6ba61ced7" />
 <img width="1920" height="1080" alt="Screenshot (31)" src="https://github.com/user-attachments/assets/e9860230-d54e-441c-9763-1d94d519381e" />
-
-
-
+<img width="1920" height="1080" alt="Screenshot (32)" src="https://github.com/user-attachments/assets/0adc5fd1-7834-4abc-a2c1-10f6ba61ced7" />
+<img width="1920" height="1080" alt="Screenshot (33)" src="https://github.com/user-attachments/assets/e8480b19-e19d-4bc9-bb0b-3cc8a7082171" />
+<img width="1920" height="1080" alt="Screenshot (34)" src="https://github.com/user-attachments/assets/c8d9b424-5314-4ddb-9bec-cb5f0d993597" />
+<img width="1920" height="1080" alt="Screenshot (35)" src="https://github.com/user-attachments/assets/102ca5a9-0480-4c24-86d2-cd7d7d76da2d" />
+<img width="1920" height="1080" alt="Screenshot (36)" src="https://github.com/user-attachments/assets/91a3d536-f7f6-4f48-b986-e4a6a7df2f98" />
+<img width="1920" height="1080" alt="Screenshot (37)" src="https://github.com/user-attachments/assets/7029eced-c102-4ba1-bfac-598024c1808e" />
+<img width="1920" height="1080" alt="Screenshot (38)" src="https://github.com/user-attachments/assets/5bde7c2d-4cf6-4419-b8f1-4a781ae769f4" />
+<img width="1920" height="1080" alt="Screenshot (39)" src="https://github.com/user-attachments/assets/2f2d0741-8bda-442c-9d24-f60c0e25f073" />
 
 ### Third-Party Services
 - TMDB API - Movie database and information
